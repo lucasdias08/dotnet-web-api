@@ -47,38 +47,38 @@ app.MapGet("/api/task/{taskId}" , (HttpRequest request, HttpResponse response) =
 app.MapDelete("/api/task/{taskId}" , (HttpRequest request, HttpResponse response) =>
 {
     TaskController taskController = new();
-    taskController.Delete(request.Path.ToString().Split('/')[3]);
+    return taskController.Delete(request.Path.ToString().Split('/')[3]);
 })
 .WithName("DeleteTaskWithId")
 .WithOpenApi();
 
-app.MapPost("/api/task", (HttpRequest request, HttpResponse response) =>
+app.MapPost("/api/task", async (HttpRequest request, HttpResponse response) =>
 {
-    Console.WriteLine("entrou");
+    TodoTask todoTaskBody = await request.ReadFromJsonAsync<TodoTask>();
     TodoTask todoTask = new();
+
     Guid myuuid = Guid.NewGuid();
     todoTask.Id = myuuid.ToString();
-    todoTask.Title = "TesteTitle";
-    todoTask.Description = "TesteDescription";
+    todoTask.Title = todoTaskBody.Title;
+    todoTask.Description = todoTaskBody.Description;
 
     TaskController taskController = new();
-    taskController.Post(todoTask);
+    return taskController.Post(todoTask);
 })
 .WithName("PostTask")
 .WithOpenApi();
 
-// app.MapPut("/api/task/{taskId}", (HttpRequest request, HttpResponse response) =>
-// {
-//     TaskController taskController = new();
-//     string taskId = taskController.Get(request.Path.ToString().Split('/')[3]);
-//     TodoTask todoTask = new();
-//     todoTask.Id = taskId;
-//     todoTask.Title = "TesteTitle";
-//     todoTask.Description = "TesteDescription";
+app.MapPut("/api/task/{taskId}", async (HttpRequest request, HttpResponse response) =>
+{
+    TaskController taskController = new();
+    TodoTask todoTaskBody = await request.ReadFromJsonAsync<TodoTask>();
+    string taskId = request.Path.ToString().Split('/')[3];
+    TodoTask todoTask = new(taskId, todoTaskBody.Title, todoTaskBody.Description);
 
-//     taskController.Put(todoTask, taskId);
-// })
-// .WithName("PutTask")
-// .WithOpenApi();
+    return taskController.Put(todoTask);
+})
+.WithName("PutTask")
+.WithOpenApi();
+
 
 app.Run();
