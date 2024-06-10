@@ -4,8 +4,8 @@ Sistema desenvolvido como teste de conhecimento, como trabalho da disciplina Sis
 
 - O sistema do projeto em questão se baseia em um front-end desktop criado com `C#`, `dotnet` e `WinForms`, um back-end do tipo API REST desenvolvido com `C#`, `dotnet` & Banco de dados `Realtime Database` do `Firebase`;
 
-- Back-end se encontra em que integra com essa API: 
->https://github.com/lucasdias08/front-venx-challenge
+- Front-end que consome essa API: 
+>https://github.com/lucasdias08/dotnet-web-api-front
 
 - Seguir o passo a passo para clonar e executar, caso queira.
 
